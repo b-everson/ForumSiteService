@@ -14,6 +14,8 @@ namespace ForumUserServiceNS
         [OperationContract]
         ForumUser GetForumUser(string name);
 
+        [OperationContract]
+        List<ForumUser> GetForumUsers();
     }
 
     [DataContract]

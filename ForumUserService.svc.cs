@@ -15,5 +15,10 @@ namespace ForumUserServiceNS
         {
             return ForumUserDB.GetUser(name);
         }
+
+        public List<ForumUser> GetForumUsers()
+        {
+            return ForumUserDB.GetUsers();
+        }
     }
 }

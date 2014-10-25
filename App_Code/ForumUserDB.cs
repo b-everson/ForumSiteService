@@ -60,6 +60,44 @@ namespace ForumUserServiceNS
             return GetUser(username) != null;
         }
 
+
+        public static List<ForumUser> GetUsers()
+        {
+            List<ForumUser> users = new List<ForumUser>();
+            String commandString = "Select [UserID],[UserName], [Password], [FirstName], [LastName], [email], [Phone], [Street1], [Street2], [City], [State], [Zip], [Permissions] From dbo.[User]";
+            SqlCommand command = new SqlCommand(commandString, new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["ForumDatabaseConnectionString"].ConnectionString));
+            try
+            {
+                command.CommandType = CommandType.Text;
+                command.Connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                ForumUser nextUser = null;
+
+                while (reader.Read())
+                {
+
+                    IDataRecord dr = (IDataRecord)reader;
+                    Object[] dataValues = new Object[dr.FieldCount];
+                    for (int i = 0; i < dr.FieldCount; i++)
+                    {
+                        dataValues[i] = dr[i];
+                    }
+
+                    nextUser = new ForumUser(Convert.ToInt32(dataValues[0]), dataValues[1].ToString(), dataValues[2].ToString(),
+                        dataValues[3].ToString(), dataValues[4].ToString(), dataValues[5].ToString(), dataValues[6].ToString(),
+                        dataValues[7].ToString(), dataValues[8].ToString(), dataValues[9].ToString(), dataValues[10].ToString(),
+                        dataValues[11].ToString(), Convert.ToInt32(dataValues[12]));
+                    users.Add(nextUser);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return users;
+        }
+
         /// <summary>
         /// Takes a user ID number, returns a ForumUser object if user ID found. Otherwise, returns null.
         /// </summary>
